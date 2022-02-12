@@ -1,0 +1,26 @@
+{
+  "name": "exercise-tracker",
+  "version": "1.0.0",
+  "description": "An exercise tracking app",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonyedgal/exercise-tracker.git"
+  },
+  "keywords": [
+    "exercise-tracker",
+    "node",
+    "express",
+    "mongodb",
+    "freecodecamp"
+  ],
+  "author": "Tony Edgal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tonyedgal/exercise-tracker/issues"
+  },
+  "homepage": "https://github.com/tonyedgal/exercise-tracker#readme"
+}
