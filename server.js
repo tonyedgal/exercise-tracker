@@ -55,6 +55,38 @@ app.get("/api/users", (req, res) => {
   });
 });
 
+app.post(
+  "/api/users/:_id/exercises",
+  bodyParser.urlencoded({ extended: false }),
+  (req, res) => {
+    let newSession = new Session({
+      description: req.body.description,
+      duration: parseInt(req.body.duration),
+      date: req.body.date,
+    });
+
+    if (newSession.date != "" || newSession.date != undefined) {
+      newSession.date = new Date().toISOString().substring(0, 10);
+    }
+
+    User.findByIdAndUpdate(
+      req.params._id,
+      { $push: { log: newSession } },
+      { new: true },
+      (error, updatedUser) => {
+        if (error) return error;
+        let responseObject = {};
+        responseObject["_id"] = updatedUser.id;
+        responseObject["username"] = updatedUser.username;
+        responseObject["date"] = new Date(newSession.date).toDateString();
+        responseObject["description"] = newSession.description;
+        responseObject["duration"] = newSession.duration;
+        res.json(responseObject);
+      }
+    );
+  }
+);
+
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to Database"))
