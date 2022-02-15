@@ -65,7 +65,7 @@ app.post(
       date: req.body.date,
     });
 
-    if (newSession.date != "" || newSession.date != undefined) {
+    if (newSession.date === "" || newSession.date === undefined) {
       newSession.date = new Date().toISOString().substring(0, 10);
     }
 
