@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 const app = express();
 const { Schema } = mongoose;
 
@@ -11,6 +12,7 @@ const port = process.env.PORT || 8000;
 const dbURI = process.env.MONGODB_URI;
 
 app.use(cors());
+app.use(morgan("dev"));
 app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
