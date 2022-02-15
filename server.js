@@ -30,12 +30,34 @@ const userSchema = new Schema({
 const User = mongoose.model("User", userSchema);
 const Session = mongoose.model("Session", exerciseSessionSchema);
 
+app.post(
+  "/api/users",
+  bodyParser.urlencoded({ extended: false }),
+  (req, res) => {
+    let newUser = new User({ username: req.body.username });
+
+    newUser.save((error, savedUser) => {
+      if (error) return error;
+      let responseObject = {};
+      responseObject["username"] = savedUser.username;
+      responseObject["_id"] = savedUser.id;
+      res.json(responseObject);
+    });
+  }
+);
+
+app.get("/api/users", (req, res) => {
+  User.find({}, (error, arrayOfUsers) => {
+    if (error) return error;
+    res.json(arrayOfUsers);
+  });
+});
+
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to Database"))
   .catch((error) => console.log(error));
 
 const listener = app.listen(port, () => {
-  console.log(`Your app is listening on port ${port}`);
   console.log(listener.address());
 });
