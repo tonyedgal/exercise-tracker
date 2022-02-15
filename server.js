@@ -87,6 +87,42 @@ app.post(
   }
 );
 
+app.get("/api/users/:_id/logs", (req, res) => {
+  User.findById(req.params._id, (error, result) => {
+    if (error) return error;
+    let responseObject = result;
+
+    if (req.query.from || req.query.to) {
+      let fromDate = new Date(0);
+      let toDate = new Date();
+
+      if (req.query.from) {
+        fromDate = new Date(req.query.from);
+      }
+
+      if (req.query.to) {
+        toDate = new Date(req.query.to);
+      }
+
+      fromDate = fromDate.getTime();
+      toDate = toDate.getTime();
+
+      responseObject.log = responseObject.log.filter((session) => {
+        let sessionDate = new Date(session.date).getTime();
+
+        return sessionDate >= fromDate && sessionDate <= toDate;
+      });
+    }
+
+    if (req.query.limit) {
+      responseObject.log = responseObject.log.slice(0, req.query.limit);
+    }
+
+    responseObject["count"] = result.log.length;
+    res.json(responseObject);
+  });
+});
+
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to Database"))
