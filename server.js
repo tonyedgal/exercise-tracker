@@ -62,12 +62,10 @@ app.post(
     let newSession = new Session({
       description: req.body.description,
       duration: parseInt(req.body.duration),
-      date: req.body.date,
+      date: req.body.date
+        ? new Date(req.body.date).toDateString()
+        : new Date().toDateString(),
     });
-
-    if (newSession.date === "" || newSession.date === undefined) {
-      newSession.date = new Date().toISOString().substring(0, 10);
-    }
 
     User.findByIdAndUpdate(
       req.params._id,
@@ -118,6 +116,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
       responseObject.log = responseObject.log.slice(0, req.query.limit);
     }
 
+    responseObject = responseObject.toJSON();
     responseObject["count"] = result.log.length;
     res.json(responseObject);
   });
